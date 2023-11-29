@@ -1,4 +1,4 @@
-package ru.romanov.contract;
+package ru.romanov.tasks.task1.contract;
 
 import java.util.Comparator;
 
