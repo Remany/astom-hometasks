@@ -1,9 +1,9 @@
-package ru.romanov.impl;
+package ru.romanov.tasks.task1.impl;
 
 import lombok.Getter;
 import lombok.Setter;
-import ru.romanov.contract.DequeContract;
-import ru.romanov.contract.ListContract;
+import ru.romanov.tasks.task1.contract.DequeContract;
+import ru.romanov.tasks.task1.contract.ListContract;
 
 import java.util.Comparator;
 import java.util.Iterator;

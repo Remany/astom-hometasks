@@ -1,6 +1,8 @@
 plugins {
+    id 'war'
     id 'java'
     id 'checkstyle'
+    id 'org.flywaydb.flyway' version '8.2.0'
 }
 
 group = 'ru.romanov'
@@ -25,16 +27,51 @@ configurations {
     }
 }
 
+ext {
+    lombokVersion = "1.18.20"
+    mapstructVersion = "1.5.5.Final"
+    lombokMapstructBindingVersion = "0.2.0"
+}
+
 dependencies {
+    implementation 'com.zaxxer:HikariCP:5.1.0'
+    implementation 'org.flywaydb:flyway-core:8.2.0'
+    implementation 'org.postgresql:postgresql:42.7.0'
+    implementation 'org.apache.tomcat:tomcat-jdbc:9.0.83'
+    implementation 'javax.servlet:javax.servlet-api:4.0.1'
+    implementation 'org.apache.tomcat:tomcat-servlet-api:9.0.83'
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.16.0'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.16.0'
     implementation name: 'checkstyle', group: 'com.puppycrawl.tools', version: '10.12.3'
+    implementation "org.mapstruct:mapstruct:${mapstructVersion}",
+            "org.projectlombok:lombok:${lombokVersion}"
 
-    compileOnly 'org.projectlombok:lombok:1.18.28'
-    annotationProcessor 'org.projectlombok:lombok:1.18.28'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}",
+            "org.projectlombok:lombok:${lombokVersion}",
+            "org.projectlombok:lombok-mapstruct-binding:${lombokMapstructBindingVersion}"
 
-    testImplementation platform('org.junit:junit-bom:5.9.1')
+    testImplementation("org.mockito:mockito-core:5.7.0")
     testImplementation 'org.junit.jupiter:junit-jupiter'
+    testImplementation platform('org.junit:junit-bom:5.9.1')
+    testImplementation 'ch.qos.logback:logback-classic:1.4.14'
+    testImplementation("org.mockito:mockito-junit-jupiter:5.7.0")
+    testImplementation 'org.powermock:powermock-api-mockito2:2.0.9'
 }
 
 test {
     useJUnitPlatform()
+}
+
+flyway {
+    url = 'jdbc:postgresql://localhost:5432/aston_crud_db'
+    user = 'postgres'
+    password = 'admin'
+    locations = ['filesystem:src/main/resources/db/migration']
+}
+
+task deploy(type: Copy) {
+    dependsOn assemble
+    from war.archivePath
+    into "$project.buildDir/deploy/"
 }

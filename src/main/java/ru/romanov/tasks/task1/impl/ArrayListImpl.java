@@ -1,6 +1,6 @@
-package ru.romanov.impl;
+package ru.romanov.tasks.task1.impl;
 
-import ru.romanov.contract.ListContract;
+import ru.romanov.tasks.task1.contract.ListContract;
 
 import java.util.Arrays;
 import java.util.Comparator;
